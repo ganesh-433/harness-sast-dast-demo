@@ -1,6 +1,7 @@
-mvnw
-.mvn
-src
-target/
-.gitignore
-Dockerfile
+/target/
+/.idea/
+.classpath
+.project
+.settings/
+.mvnw
+.mvnw.cmd
