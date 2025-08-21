@@ -1,23 +1,10 @@
 import sqlite3
-import os
 from flask import Flask, request
 
 app = Flask(__name__)
 
 # Set the path to the database file
 DATABASE_FILE = 'database.db'
-
-# Function to initialize the database
-def init_db():
-    conn = sqlite3.connect(DATABASE_FILE)
-    cursor = conn.cursor()
-    # Create the users table if it doesn't exist
-    cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)")
-    conn.commit()
-    conn.close()
-
-# Initialize the database when the application starts
-init_db()
 
 # Vulnerable to SQL injection!
 @app.route('/users')
@@ -27,7 +14,6 @@ def get_user():
     conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.cursor()
     
-    # Still vulnerable for the DAST demo
     query = "SELECT * FROM users WHERE id = " + user_id
     
     try:
@@ -42,4 +28,10 @@ def home():
     return "Welcome to the home page! Try /users?id=1"
 
 if __name__ == '__main__':
+    # Initialize the database on startup
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cursor = conn.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)")
+        conn.commit()
+
     app.run(host='0.0.0.0', port=5000)
