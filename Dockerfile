@@ -1,7 +1,18 @@
-FROM openjdk:11-jdk-slim
+# Use a slim Python image for a smaller footprint
+FROM python:3.9-slim
+
+# Set the working directory in the container
 WORKDIR /app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
-COPY src ./src
-CMD ["./mvnw", "spring-boot:run"]
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Run the application
+CMD ["python", "app.py"]
