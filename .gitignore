@@ -1,7 +1,3 @@
-/target/
-/.idea/
-.classpath
-.project
-.settings/
-.mvnw
-.mvnw.cmd
+__pycache__/
+*.pyc
+venv/
